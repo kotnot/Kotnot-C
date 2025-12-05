@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitrexScript - Документация</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --code-bg: #1e1e1e;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+        }
+
+        .logo {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .logo span {
+            background: linear-gradient(45deg, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tagline {
+            color: #666;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .version {
+            background: var(--light);
+            color: var(--primary);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: white;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab:hover {
+            background: var(--light);
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        .section {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .section h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h2 i {
+            color: var(--secondary);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .card {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--secondary);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .card.feature {
+            border-left-color: var(--success);
+        }
+
+        .card.example {
+            border-left-color: var(--warning);
+        }
+
+        .card.warning {
+            border-left-color: var(--danger);
+        }
+
+        code {
+            background: var(--code-bg);
+            color: #f8f8f2;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            overflow-x: auto;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        pre .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .syntax-keyword {
+            color: #ff79c6;
+        }
+
+        .syntax-string {
+            color: #f1fa8c;
+        }
+
+        .syntax-number {
+            color: #bd93f9;
+        }
+
+        .syntax-comment {
+            color: #6272a4;
+        }
+
+        .syntax-function {
+            color: #50fa7b;
+        }
+
+        .keyword-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 1rem 0;
+        }
+
+        .keyword {
+            background: var(--light);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9em;
+        }
+
+        .keyword.control {
+            background: #ffeaa7;
+            color: #d63031;
+        }
+
+        .keyword.data {
+            background: #a29bfe;
+            color: white;
+        }
+
+        .keyword.functional {
+            background: #55efc4;
+            color: #2d3436;
+        }
+
+        .example-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .example-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .example {
+            background: #f8f9fa;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            border: 1px solid #dee2e6;
+        }
+
+        .example h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toc {
+            position: sticky;
+            top: 20px;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .toc h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .toc ul {
+            list-style: none;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            color: #666;
+            text-decoration: none;
+            display: block;
+            padding: 0.3rem 0;
+            border-left: 3px solid transparent;
+            padding-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .toc a:hover,
+        .toc a.active {
+            color: var(--secondary);
+            border-left-color: var(--secondary);
+            padding-left: 15px;
+        }
+
+        .quick-start {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .quick-start h2 {
+            color: white;
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .badge.new {
+            background: var(--success);
+            color: white;
+        }
+
+        .badge.experimental {
+            background: var(--warning);
+            color: white;
+        }
+
+        .badge.deprecated {
+            background: var(--danger);
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .compare-table th,
+        .compare-table td {
+            padding: 1rem;
+            text-align: left;
+            border: 1px solid #dee2e6;
+        }
+
+        .compare-table th {
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        .compare-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: white;
+            margin-top: 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-code"></i>
+                <span>GitrexScript</span>
+            </div>
+            <p class="tagline">Современный, выразительный, русскоязычный язык программирования</p>
+            <div class="version">v1.0.0</div>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="tab active" data-tab="overview">Обзор</button>
+            <button class="tab" data-tab="syntax">Синтаксис</button>
+            <button class="tab" data-tab="examples">Примеры</button>
+            <button class="tab" data-tab="reference">Справка</button>
+            <button class="tab" data-tab="tools">Инструменты</button>
+        </nav>
+
+        <div class="content active" id="overview">
+            <div class="section">
+                <h2><i class="fas fa-rocket"></i> Что такое GitrexScript?</h2>
+                <p><strong>GitrexScript</strong> — это современный, выразительный язык программирования с русскоязычным синтаксисом, созданный для быстрого прототипирования, обучения и разработки интерактивных приложений.</p>
+                
+                <div class="card-grid">
+                    <div class="card feature">
+                        <h3><i class="fas fa-bolt"></i> Быстрый старт</h3>
+                        <p>Простой синтаксис позволяет начать программировать сразу, без долгого изучения.</p>
+                    </div>
+                    <div class="card feature">
+                        <h3><i class="fas fa-language"></i> Русский синтаксис</h3>
+                        <p>Ключевые слова и функции на русском языке делают код более понятным.</p>
+                    </div>
+                    <div class="card feature">
+                        <h3><i class="fas fa-magic"></i> Современные возможности</h3>
+                        <p>Pattern matching, функциональное программирование, работа с JSON и многое другое.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-start">
+                <h2><i class="fas fa-play-circle"></i> Быстрый старт за 60 секунд</h2>
+                
+                <div class="example-container">
+                    <div class="example">
+                        <h4><i class="fas fa-file-code"></i> Программа на GitrexScript</h4>
+                        <pre><code><span class="syntax-comment">// Первая программа на GitrexScript</span>
+<span class="syntax-keyword">список</span> = [1, 2, 3, 4, 5]
+
+<span class="syntax-comment">// Удвоим все элементы</span>
+результат = <span class="syntax-keyword">список</span>.<span class="syntax-function">преобразовать</span>(элемент => элемент * 2)
+
+<span class="syntax-keyword">напечатать</span>("Результат: " + результат)</code></pre>
+                    </div>
+                    
+                    <div class="example">
+                        <h4><i class="fas fa-terminal"></i> Результат выполнения</h4>
+                        <pre><code>> Результат: [2, 4, 6, 8, 10]</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2><i class="fas fa-star"></i> Основные возможности</h2>
+                
+                <table class="compare-table">
+                    <tr>
+                        <th>Возможность</th>
+                        <th>Описание</th>
+                        <th>Пример</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Динамическая типизация</strong></td>
+                        <td>Типы определяются во время выполнения</td>
+                        <td><code>число = 42</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pattern Matching</strong> <span class="badge new">NEW</span></td>
+                        <td>Сопоставление с образцом для сложных условий</td>
+                        <td><code>соответствует значение: ...</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Функциональное программирование</strong></td>
+                        <td>Функции высшего порядка, лямбды</td>
+                        <td><code>список.преобразовать(x => x * x)</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Интерактивность</strong></td>
+                        <td>Взаимодействие с пользователем</td>
+                        <td><code>спросить("Ваше имя?")</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Работа с JSON</strong></td>
+                        <td>Встроенная поддержка JSON</td>
+                        <td><code>json.разобрать(данные)</code></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="content" id="syntax">
+            <div class="section">
+                <h2><i class="fas fa-code"></i> Основной синтаксис</h2>
+                
+                <h3>Ключевые слова</h3>
+                <div class="keyword-list">
+                    <span class="keyword control">если</span>
+                    <span class="keyword control">иначе</span>
+                    <span class="keyword control">иначе_если</span>
+                    <span class="keyword control">пока</span>
+                    <span class="keyword control">для</span>
+                    <span class="keyword control">функция</span>
+                    <span class="keyword control">вернуть</span>
+                    <span class="keyword control">прервать</span>
+                    <span class="keyword control">продолжить</span>
+                    <span class="keyword data">истина</span>
+                    <span class="keyword data">ложь</span>
+                    <span class="keyword data">ничего</span>
+                    <span class="keyword">соответствует</span>
+                    <span class="keyword">случай</span>
+                </div>
+                
+                <h3>Типы данных</h3>
+                <pre><code><span class="syntax-comment">// Числа</span>
+целое = 42
+дробное = 3.14
+
+<span class="syntax-comment">// Текст</span>
+строка = "Привет, мир!"
+символ = 'A'
+
+<span class="syntax-comment">// Логические</span>
+логическое = истина
+противоположное = ложь
+
+<span class="syntax-comment">// Коллекции</span>
+список = [1, 2, 3]
+словарь = {"ключ": "значение"}
+кортеж = (1, 2, 3)</code></pre>
+            </div>
+
+            <div class="section">
+                <h2><i class="fas fa-cogs"></i> Управляющие конструкции</h2>
+                
+                <div class="example-container">
+                    <div class="example">
+                        <h4><i class="fas fa-random"></i> Условные операторы</h4>
+                        <pre><code><span class="syntax-keyword">если</span> возраст >= 18:
+    <span class="syntax-function">напечатать</span>("Совершеннолетний")
+<span class="syntax-keyword">иначе_если</span> возраст >= 13:
+    <span class="syntax-function">напечатать</span>("Подросток")
+<span class="syntax-keyword">иначе</span>:
+    <span class="syntax-function">напечатать</span>("Ребенок")</code></pre>
+                    </div>
+                    
+                    <div class="example">
+                        <h4><i class="fas fa-redo"></i> Циклы</h4>
+                        <pre><code><span class="syntax-comment">// Цикл while</span>
+счетчик = 0
+<span class="syntax-keyword">пока</span> счетчик < 5:
+    <span class="syntax-function">напечатать</span>(счетчик)
+    счетчик = счетчик + 1
+
+<span class="syntax-comment">// Цикл for</span>
+<span class="syntax-keyword">для</span> элемент в [1, 2, 3]:
+    <span class="syntax-function">напечатать</span>(элемент)</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2><i class="fas fa-project-diagram"></i> Pattern Matching</h2>
+                
+                <pre><code><span class="syntax-comment">// Сопоставление значений</span>
+значение = "красный"
+
+<span class="syntax-keyword">соответствует</span> значение:
+    <span class="syntax-keyword">случай</span> "красный":
+        <span class="syntax-function">напечатать</span>("Стоп!")
+    <span class="syntax-keyword">случай</span> "желтый":
+        <span class="syntax-function">напечатать</span>("Внимание!")
+    <span class="syntax-keyword">случай</span> "зеленый":
+        <span class="syntax-function">напечатать</span>("Можно идти!")
+    <span class="syntax-keyword">случай</span> _:
+        <span class="syntax-function">напечата</span>("Неизвестный цвет")</code></pre>
+            </div>
+        </div>
+
+        <div class="content" id="examples">
+            <div class="section">
+                <h2><i class="fas fa-laptop-code"></i> Примеры программ</h2>
+                
+                <div class="example">
+                    <h4><i class="fas fa-calculator"></i> Калькулятор</h4>
+                    <pre><code><span class="syntax-comment">// Простой калькулятор</span>
+<span class="syntax-function">напечатать</span>("🧮 Калькулятор GitrexScript")
+
+<span class="syntax-keyword">пока</span> истина:
+    операция = <span class="syntax-function">выбрать</span>("Выберите операцию:", [
+        "Сложение", "Вычитание", "Умножение", "Деление", "Выход"
+    ])
+    
+    <span class="syntax-keyword">если</span> операция == "Выход":
+        <span class="syntax-function">напечатать</span>("До свидания!")
+        <span class="syntax-keyword">прервать</span>
+    
+    a = <span class="syntax-function">число</span>(<span class="syntax-function">спросить</span>("Первое число:"))
+    b = <span class="syntax-function">число</span>(<span class="syntax-function">спросить</span>("Второе число:"))
+    
+    <span class="syntax-keyword">соответствует</span> операция:
+        <span class="syntax-keyword">случай</span> "Сложение":
+            результат = a + b
+        <span class="syntax-keyword">случай</span> "Вычитание":
+            результат = a - b
+        <span class="syntax-keyword">случай</span> "Умножение":
+            результат = a * b
+        <span class="syntax-keyword">случай</span> "Деление":
+            <span class="syntax-keyword">если</span> b != 0:
+                результат = a / b
+            <span class="syntax-keyword">иначе</span>:
+                <span class="syntax-function">напечатать</span>("Ошибка: деление на ноль!")
+                <span class="syntax-keyword">продолжить</span>
+    
+    <span class="syntax-function">напечатать</span>("Результат: " + a + " " + операция + " " + b + " = " + результат)</code></pre>
+                </div>
+                
+                <div class="example">
+                    <h4><i class="fas fa-gamepad"></i> Игра "Угадай число"</h4>
+                    <pre><code><span class="syntax-comment">// Игра "Угадай число"</span>
+<span class="syntax-function">напечатать</span>("🎮 Угадай число от 1 до 100")
+загаданное = <span class="syntax-function">случайное</span>(1, 100)
+попытки = 0
+
+<span class="syntax-keyword">пока</span> истина:
+    попытка = <span class="syntax-function">число</span>(<span class="syntax-function">спросить</span>("Ваша попытка:"))
+    попытки = попытки + 1
+    
+    <span class="syntax-keyword">соответствует</span> попытка:
+        <span class="syntax-keyword">случай</span> загаданное:
+            <span class="syntax-function">напечатать</span>("🎉 Угадали за " + попытки + " попыток!")
+            <span class="syntax-keyword">прервать</span>
+        <span class="syntax-keyword">случай</span> _ <span class="syntax-keyword">если</span> попытка < загаданное:
+            <span class="syntax-function">напечатать</span>("📈 Больше!")
+        <span class="syntax-keyword">случай</span> _:
+            <span class="syntax-function">напечатать</span>("📉 Меньше!")
+    
+    <span class="syntax-keyword">если</span> попытки >= 10:
+        <span class="syntax-function">напечатать</span>("💔 Проиграли! Число было: " + загаданное)
+        <span class="syntax-keyword">прервать</span></code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="content" id="reference">
+            <div class="section">
+                <h2><i class="fas fa-book"></i> Справочник по функциям</h2>
+                
+                <div class="card-grid">
+                    <div class="card">
+                        <h3><i class="fas fa-print"></i> Вывод</h3>
+                        <p><code>напечатать(текст)</code> - Вывод текста</p>
+                        <p><code>отформатировать(шаблон, ...)</code> - Форматированный вывод</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h3><i class="fas fa-keyboard"></i> Ввод</h3>
+                        <p><code>спросить(вопрос)</code> - Задать вопрос пользователю</p>
+                        <p><code>выбрать(вопрос, варианты)</code> - Выбор из списка</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h3><i class="fas fa-list"></i> Работа с коллекциями</h3>
+                        <p><code>длина(коллекция)</code> - Длина коллекции</p>
+                        <p><code>преобразовать(список, функция)</code> - Map операция</p>
+                        <p><code>отфильтровать(список, функция)</code> - Filter операция</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h3><i class="fas fa-database"></i> Работа с данными</h3>
+                        <p><code>json.разобрать(строка)</code> - Парсинг JSON</p>
+                        <p><code>json.строку(объект)</code> - Преобразование в JSON</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content" id="tools">
+            <div class="section">
+                <h2><i class="fas fa-tools"></i> Инструменты разработки</h2>
+                
+                <h3><i class="fas fa-download"></i> Установка</h3>
+                <p>Для работы с GitrexScript необходимы:</p>
+                <ol>
+                    <li>Интерпретатор GitrexScript</li>
+                    <li>Текстовый редактор (VS Code, Sublime Text, etc.)</li>
+                    <li>Расширение для подсветки синтаксиса (опционально)</li>
+                </ol>
+                
+                <h3><i class="fas fa-code-branch"></i> Работа с кодом</h3>
+                <div class="example">
+                    <h4><i class="fas fa-terminal"></i> Запуск программы</h4>
+                    <pre><code># Запуск файла
+gitrexscript программа.grx
+
+# Интерактивный режим
+gitrexscript
+
+# Вывод версии
+gitrexscript --версия</code></pre>
+                </div>
+                
+                <h3><i class="fas fa-bug"></i> Отладка</h3>
+                <div class="card warning">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Типичные ошибки</h3>
+                    <p><strong>Ошибка:</strong> "Неизвестный идентификатор: принт"</p>
+                    <p><strong>Решение:</strong> Используйте <code>напечатать</code> вместо <code>принт</code></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>GitrexScript © 2024. Документация находится в разработке.</p>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-github"></i> GitHub</a>
+            <a href="#"><i class="fab fa-discord"></i> Discord</a>
+            <a href="#"><i class="fab fa-telegram"></i> Telegram</a>
+        </div>
+    </footer>
+
+    <script>
+        // Переключение вкладок
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Удаляем активный класс у всех вкладок и контента
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+                
+                // Активируем текущую вкладку и соответствующий контент
+                tab.classList.add('active');
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Кнопка копирования кода
+        document.querySelectorAll('pre').forEach(pre => {
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'copy-btn';
+            copyBtn.innerHTML = '<i class="far fa-copy"></i> Копировать';
+            pre.appendChild(copyBtn);
+            
+            copyBtn.addEventListener('click', () => {
+                const code = pre.querySelector('code').textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Скопировано!';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = '<i class="far fa-copy"></i> Копировать';
+                    }, 2000);
+                });
+            });
+        });
+
+        // Подсветка синтаксиса (упрощенная)
+        function highlightSyntax() {
+            document.querySelectorAll('code').forEach(code => {
+                let html = code.innerHTML;
+                
+                // Ключевые слова
+                const keywords = ['если', 'иначе', 'иначе_если', 'пока', 'для', 'функция', 
+                                 'вернуть', 'прервать', 'продолжить', 'истина', 'ложь', 
+                                 'ничего', 'соответствует', 'случай'];
+                
+                keywords.forEach(keyword => {
+                    const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+                    html = html.replace(regex, `<span class="syntax-keyword">${keyword}</span>`);
+                });
+                
+                // Строки
+                html = html.replace(/"[^"]*"/g, '<span class="syntax-string">$&</span>');
+                html = html.replace(/'[^']*'/g, '<span class="syntax-string">$&</span>');
+                
+                // Числа
+                html = html.replace(/\b\d+(\.\d+)?\b/g, '<span class="syntax-number">$&</span>');
+                
+                // Комментарии
+                html = html.replace(/\/\/.*$/gm, '<span class="syntax-comment">$&</span>');
+                
+                // Функции
+                html = html.replace(/\b(напечатать|спросить|выбрать|длина|преобразовать)\b/g, 
+                    '<span class="syntax-function">$1</span>');
+                
+                code.innerHTML = html;
+            });
+        }
+
+        // Запускаем подсветку после загрузки
+        document.addEventListener('DOMContentLoaded', highlightSyntax);
+        
+        // Плавная прокрутка для навигации
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
